@@ -3,19 +3,19 @@ import React, { useState } from 'react';
 const TodoForm = (props) => {
     const [input, setInput] = useState('');
 
+    const handleChange = e => {
+        setInput(e.target.value);
+    };
+
     const handleFormSubmit = e => {
         e.preventDefault();
 
         props.onSubmit({
             id: Date.now(),
-            text: e.target.value
+            text: input
         });
 
         setInput('');
-    };
-
-    const handleChange = e => {
-        setInput(e.target.value);
     };
 
     return (
@@ -23,8 +23,9 @@ const TodoForm = (props) => {
             <input 
                 type="text" 
                 placeholder="Add a todo" 
-                value={input}
                 className="todo-input"
+                name="text"
+                value={input}
                 onChange={handleChange}
             />
             <button type="submit" className="todo-button">Add todo</button>
