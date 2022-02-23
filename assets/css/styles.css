@@ -32,6 +32,8 @@ a:hover {
 }
 button {
   cursor: pointer;
+  border: 0;
+  background-color: transparent;
 }
 
 .container {
@@ -128,6 +130,11 @@ header {
   display: flex;
   align-items: center;
   color: var(--light-grayish-blue2);
+  cursor: pointer;
+}
+.todo-left.completed {
+  text-decoration: line-through;
+  opacity: 0.4;
 }
 
 .todo-left input[type="checkbox"] {
