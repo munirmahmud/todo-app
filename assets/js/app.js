@@ -1,5 +1,7 @@
 const todoForm = document.querySelector(".todo_form");
 const todoItems = document.querySelector(".todo-items");
+const todoFooter = document.querySelector(".todo-footer");
+const clearCompleted = document.querySelector(".clear-completed");
 
 let tasks = [];
 
@@ -35,6 +37,7 @@ const handleSubmit = (e) => {
   todoForm.reset();
 
   todoItems.dispatchEvent(new CustomEvent("updateTask"));
+  displayFooterIfHaveTasks();
 };
 
 const displayTasks = () => {
@@ -85,18 +88,56 @@ function displayTasksFromLocalStorage() {
 
     todoItems.dispatchEvent(new CustomEvent("updateTask"));
   }
+
+  displayFooterIfHaveTasks();
+}
+
+function displayFooterIfHaveTasks() {
+  if (tasks.length === 0) {
+    todoFooter.style.display = "none";
+  } else {
+    todoFooter.style.display = "flex";
+  }
+
+  const incompletedTasks = tasks.filter((item) => !item.isCompleted).length;
+
+  countLeftItems(incompletedTasks);
+}
+
+function countLeftItems(totalItems = 2) {
+  const leftItems = document.querySelector(".left-items");
+
+  const count = totalItems > 1 ? `${totalItems} Items Left` : `${totalItems} Item Left`;
+  leftItems.innerHTML = count;
+}
+
+function clearCompletedTasks(e) {
+  const countCompletedTask = tasks.filter((item) => item.isCompleted);
+  if (countCompletedTask.length === 0) return;
+
+  const countInCompletedTask = tasks.filter((item) => !item.isCompleted);
+
+  tasks = countInCompletedTask;
+  displayFooterIfHaveTasks();
+  todoItems.dispatchEvent(new CustomEvent("updateTask"));
 }
 
 function completeTask(id) {
   const clickedItem = tasks.find((item) => item.id === id);
   clickedItem.isCompleted = !clickedItem.isCompleted;
   todoItems.dispatchEvent(new CustomEvent("updateTask"));
+
+  // filter left items
+  const incompletedTasks = tasks.filter((item) => !item.isCompleted).length;
+
+  countLeftItems(incompletedTasks);
 }
 
 function deleteTask(id) {
   const deletedItem = tasks.filter((item) => item.id !== id);
   tasks = deletedItem;
   todoItems.dispatchEvent(new CustomEvent("updateTask"));
+  displayFooterIfHaveTasks();
 }
 
 function editTask(id) {
@@ -109,6 +150,7 @@ function editTask(id) {
 todoForm.addEventListener("submit", handleSubmit);
 todoItems.addEventListener("updateTask", displayTasks);
 todoItems.addEventListener("updateTask", saveTasksIntoLocalStorage);
+clearCompleted.addEventListener("click", clearCompletedTasks);
 
 todoItems.addEventListener("click", (e) => {
   const id = parseInt(e.target.id) || parseInt(e.target.value);

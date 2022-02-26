@@ -96,9 +96,11 @@ header {
 }
 
 /* TODO ITEMS */
-.todo-items {
+.todo-items-wrapper {
   background-color: var(--very-dark-grayish-blue2);
   border-radius: 8px;
+}
+.todo-items {
   list-style: none;
 }
 
