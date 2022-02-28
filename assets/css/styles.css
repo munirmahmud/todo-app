@@ -165,7 +165,7 @@ header {
   transition: color 0.3s ease-in-out;
 }
 .footer-menus li:hover,
-.footer-menus li.active {
+.footer-menus li.selected {
   color: #5083f5;
 }
 
